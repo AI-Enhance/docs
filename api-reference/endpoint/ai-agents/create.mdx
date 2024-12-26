@@ -1,0 +1,150 @@
+---
+title: 'Create AI Agent'
+api: 'POST /api/ai-agents'
+description: 'Create a new AI agent with specific configurations'
+---
+
+<Note>
+  **Core API**: Configure a new AI agent with voice settings and capabilities for your organization.
+</Note>
+
+## Request Body
+
+<ParamField body="name" type="string" required>
+  Name of the AI agent
+</ParamField>
+
+<ParamField body="type" type="string" required>
+  Type of agent (currently only "VOICE" supported)
+</ParamField>
+
+<ParamField body="configuration" type="object" required>
+  <Expandable title="Configuration Object">
+    <ParamField body="voice_type" type="string" required>
+      Voice type: "NATURAL" or "SYNTHETIC"
+    </ParamField>
+    <ParamField body="language" type="string" required>
+      Language code (e.g., "en-US")
+    </ParamField>
+    <ParamField body="capabilities" type="array" required>
+      Array of enabled capabilities
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Voice Types
+
+<ResponseField name="voice_type" type="string">
+  <Expandable title="Available Options">
+    <ResponseField name="NATURAL" type="string">
+      Human-like voice with natural intonation
+    </ResponseField>
+    <ResponseField name="SYNTHETIC" type="string">
+      Standard text-to-speech voice
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Available Capabilities
+
+<ResponseField name="capabilities" type="array">
+  <Expandable title="Available Options">
+    <ResponseField name="appointment_setting" type="string">
+      Schedule and manage appointments with customers
+    </ResponseField>
+    <ResponseField name="lead_qualification" type="string">
+      Qualify leads based on customizable criteria
+    </ResponseField>
+    <ResponseField name="follow_up" type="string">
+      Handle follow-up calls and reminders
+    </ResponseField>
+    <ResponseField name="live_transfer" type="string">
+      Transfer calls to live agents when needed
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request POST \
+  --url https://api.aienhance.net/v1/api/ai-agents \
+  --header 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "Sales Agent",
+    "type": "VOICE",
+    "configuration": {
+      "voice_type": "NATURAL",
+      "language": "en-US",
+      "capabilities": [
+        "appointment_setting",
+        "lead_qualification",
+        "live_transfer"
+      ]
+    }
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "agent_123",
+    "name": "Sales Agent",
+    "type": "VOICE",
+    "status": "TRAINING",
+    "configuration": {
+      "voice_type": "NATURAL",
+      "language": "en-US",
+      "capabilities": [
+        "appointment_setting",
+        "lead_qualification",
+        "live_transfer"
+      ]
+    },
+    "created_at": "2024-01-20T10:00:00Z"
+  }
+}
+```
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Properties">
+    <ResponseField name="id" type="string">
+      Unique identifier for the created AI agent
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Name of the AI agent
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Type of AI agent (currently only "VOICE")
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Initial status (always "TRAINING")
+    </ResponseField>
+    <ResponseField name="configuration" type="object">
+      <Expandable title="Properties">
+        <ResponseField name="voice_type" type="string">
+          "NATURAL" or "SYNTHETIC"
+        </ResponseField>
+        <ResponseField name="language" type="string">
+          Language code (e.g., "en-US")
+        </ResponseField>
+        <ResponseField name="capabilities" type="array">
+          Array of enabled capabilities
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      Creation timestamp (ISO 8601)
+    </ResponseField>
+  </Expandable>
+</ResponseField>

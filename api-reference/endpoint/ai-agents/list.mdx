@@ -1,0 +1,99 @@
+---
+title: 'List AI Agents'
+api: 'GET /api/ai-agents'
+description: 'Get all AI agents available to your organization'
+---
+
+<Note>
+  **Core API**: This endpoint returns all AI agents configured for your organization, including their status and capabilities.
+</Note>
+
+## Request
+
+<ParamField query="page" type="integer">
+  Page number for pagination
+</ParamField>
+
+<ParamField query="per_page" type="integer">
+  Number of items per page
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Properties">
+    <ResponseField name="agents" type="array">
+      Array of AI agent objects
+      
+      <Expandable title="Agent Object">
+        <ResponseField name="id" type="string">
+          Unique identifier for the AI agent
+        </ResponseField>
+        <ResponseField name="name" type="string">
+          Name of the AI agent
+        </ResponseField>
+        <ResponseField name="type" type="string">
+          Type of AI agent (currently only "VOICE")
+        </ResponseField>
+        <ResponseField name="status" type="string">
+          Current status: "ACTIVE", "INACTIVE", or "TRAINING"
+        </ResponseField>
+        <ResponseField name="configuration" type="object">
+          <Expandable title="Properties">
+            <ResponseField name="voice_type" type="string">
+              "NATURAL" or "SYNTHETIC"
+            </ResponseField>
+            <ResponseField name="language" type="string">
+              Language code (e.g., "en-US")
+            </ResponseField>
+            <ResponseField name="capabilities" type="array">
+              Array of enabled capabilities
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="total" type="integer">
+      Total number of agents
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request GET \
+  --url 'https://api.aienhance.net/v1/api/ai-agents?page=1&per_page=10' \
+  --header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "agents": [
+      {
+        "id": "agent_123",
+        "name": "Sales Agent",
+        "type": "VOICE",
+        "status": "ACTIVE",
+        "configuration": {
+          "voice_type": "NATURAL",
+          "language": "en-US",
+          "capabilities": [
+            "appointment_setting",
+            "lead_qualification"
+          ]
+        },
+        "created_at": "2024-01-20T10:00:00Z"
+      }
+    ],
+    "total": 1
+  }
+}

@@ -1,0 +1,93 @@
+---
+title: 'Delete AI Agent'
+api: 'DELETE /api/ai-agents/{agent_id}'
+description: 'Remove an AI agent from your organization'
+---
+
+<Note>
+  **Core API**: Permanently delete an AI agent and its configuration.
+</Note>
+
+<Warning>
+  This action cannot be undone. The agent's configuration and history will be permanently deleted.
+</Warning>
+
+## Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  Unique identifier of the AI agent to delete
+</ParamField>
+
+## Example Request
+
+```bash
+curl --request DELETE \
+  --url https://api.aienhance.net/v1/api/ai-agents/agent_123 \
+  --header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "message": "AI agent successfully deleted"
+  }
+}
+```
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Properties">
+    <ResponseField name="message" type="string">
+      Confirmation message
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Error Responses
+
+<CodeGroup>
+```json Agent Not Found
+{
+  "success": false,
+  "error": {
+    "code": "agent_not_found",
+    "message": "AI agent with the specified ID was not found"
+  }
+}
+```
+
+```json Active Calls
+{
+  "success": false,
+  "error": {
+    "code": "active_calls",
+    "message": "Cannot delete agent with active calls"
+  }
+}
+```
+
+```json Permission Denied
+{
+  "success": false,
+  "error": {
+    "code": "permission_denied",
+    "message": "You do not have permission to delete this agent"
+  }
+}
+```
+</CodeGroup>
+
+## Notes
+
+- Active agents with ongoing calls cannot be deleted
+- Only organization administrators can delete agents
+- Associated call logs and analytics data will be retained
+- Agent configurations cannot be recovered after deletion

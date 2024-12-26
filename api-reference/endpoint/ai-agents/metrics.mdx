@@ -1,0 +1,136 @@
+---
+title: 'Get Agent Metrics'
+api: 'GET /api/ai-agents/{agent_id}/metrics'
+description: 'Get detailed performance metrics for an AI agent'
+---
+
+<Note>
+  **Analytics API**: Retrieve comprehensive performance data for a specific AI agent.
+</Note>
+
+## Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  Unique identifier of the AI agent
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="start_date" type="string">
+  Start date for metrics (ISO 8601)
+</ParamField>
+
+<ParamField query="end_date" type="string">
+  End date for metrics (ISO 8601)
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Properties">
+    <ResponseField name="agent_id" type="string">
+      Unique identifier for the AI agent
+    </ResponseField>
+    <ResponseField name="metrics" type="object">
+      <Expandable title="Properties">
+        <ResponseField name="total_calls" type="integer">
+          Total number of calls handled
+        </ResponseField>
+        <ResponseField name="success_rate" type="number">
+          Success rate as a decimal (0.0 to 1.0)
+        </ResponseField>
+        <ResponseField name="average_duration" type="integer">
+          Average call duration in seconds
+        </ResponseField>
+        <ResponseField name="outcomes" type="object">
+          <Expandable title="Properties">
+            <ResponseField name="appointments_set" type="integer">
+              Number of appointments scheduled
+            </ResponseField>
+            <ResponseField name="qualified_leads" type="integer">
+              Number of leads qualified
+            </ResponseField>
+            <ResponseField name="follow_ups" type="integer">
+              Number of follow-up calls scheduled
+            </ResponseField>
+            <ResponseField name="transfers" type="integer">
+              Number of calls transferred to live agents
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="period" type="object">
+      <Expandable title="Properties">
+        <ResponseField name="start" type="string">
+          Start date of metrics period (ISO 8601)
+        </ResponseField>
+        <ResponseField name="end" type="string">
+          End date of metrics period (ISO 8601)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request GET \
+  --url 'https://api.aienhance.net/v1/api/ai-agents/agent_123/metrics?start_date=2024-01-01T00:00:00Z&end_date=2024-01-31T23:59:59Z' \
+  --header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "agent_id": "agent_123",
+    "metrics": {
+      "total_calls": 1000,
+      "success_rate": 0.85,
+      "average_duration": 180,
+      "outcomes": {
+        "appointments_set": 150,
+        "qualified_leads": 300,
+        "follow_ups": 400,
+        "transfers": 50
+      }
+    },
+    "period": {
+      "start": "2024-01-01T00:00:00Z",
+      "end": "2024-01-31T23:59:59Z"
+    }
+  }
+}
+```
+
+## Error Responses
+
+<CodeGroup>
+```json Agent Not Found
+{
+  "success": false,
+  "error": {
+    "code": "agent_not_found",
+    "message": "AI agent with the specified ID was not found"
+  }
+}
+```
+
+```json Invalid Date Range
+{
+  "success": false,
+  "error": {
+    "code": "invalid_date_range",
+    "message": "The specified date range is invalid"
+  }
+}
+```
+</CodeGroup>

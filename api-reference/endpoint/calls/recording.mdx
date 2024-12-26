@@ -1,0 +1,142 @@
+---
+title: 'Get Call Recording'
+api: 'GET /api/call-logs/{call_id}/recording'
+description: 'Get the audio recording of a specific call'
+---
+
+<Note>
+  **Core API**: Download the audio recording of a call in various formats.
+</Note>
+
+## Path Parameters
+
+<ParamField path="call_id" type="string" required>
+  Unique identifier of the call
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="format" type="string">
+  Audio format: "mp3" (default), "wav", or "ogg"
+</ParamField>
+
+<ParamField query="quality" type="string">
+  Audio quality: "high" (default), "medium", or "low"
+</ParamField>
+
+<ParamField query="download" type="boolean">
+  Set to true to download file, false to stream (default: false)
+</ParamField>
+
+## Response
+
+The response will be an audio file in the requested format, with the appropriate content-type header:
+- `audio/mpeg` for MP3
+- `audio/wav` for WAV
+- `audio/ogg` for OGG
+
+For downloads, the content-disposition header will be set to `attachment`.
+
+## Example Request
+
+```bash
+# Stream MP3
+curl --request GET \
+  --url 'https://api.aienhance.net/v1/api/call-logs/call_123/recording?format=mp3' \
+  --header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+
+# Download WAV
+curl --request GET \
+  --url 'https://api.aienhance.net/v1/api/call-logs/call_123/recording?format=wav&download=true' \
+  --header 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+  --output call_recording.wav
+```
+
+## Error Responses
+
+<CodeGroup>
+```json Call Not Found
+{
+  "success": false,
+  "error": {
+    "code": "call_not_found",
+    "message": "Call log with the specified ID was not found"
+  }
+}
+```
+
+```json Recording Not Found
+{
+  "success": false,
+  "error": {
+    "code": "recording_not_found",
+    "message": "Recording not available for this call"
+  }
+}
+```
+
+```json Invalid Format
+{
+  "success": false,
+  "error": {
+    "code": "invalid_format",
+    "message": "Unsupported audio format requested"
+  }
+}
+```
+
+```json Permission Denied
+{
+  "success": false,
+  "error": {
+    "code": "permission_denied",
+    "message": "You do not have permission to access this recording"
+  }
+}
+```
+</CodeGroup>
+
+## Audio Format Details
+
+<ResponseField name="formats" type="object">
+  <Expandable title="Available Formats">
+    <ResponseField name="mp3" type="object">
+      <Expandable title="Properties">
+        <ResponseField name="bitrate" type="string">
+          High: 320kbps, Medium: 192kbps, Low: 128kbps
+        </ResponseField>
+        <ResponseField name="sample_rate" type="string">
+          44.1kHz
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="wav" type="object">
+      <Expandable title="Properties">
+        <ResponseField name="bitrate" type="string">
+          High: 1411kbps, Medium: 705kbps, Low: 352kbps
+        </ResponseField>
+        <ResponseField name="sample_rate" type="string">
+          High: 44.1kHz, Medium: 22.05kHz, Low: 11.025kHz
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="ogg" type="object">
+      <Expandable title="Properties">
+        <ResponseField name="bitrate" type="string">
+          High: 256kbps, Medium: 160kbps, Low: 96kbps
+        </ResponseField>
+        <ResponseField name="sample_rate" type="string">
+          44.1kHz
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Notes
+
+- Recordings are retained for 90 days by default
+- All recordings are dual-channel (agent and customer)
+- High-quality recordings are recommended for analysis
+- Streaming is recommended for web playback
+- Downloads are recommended for archival

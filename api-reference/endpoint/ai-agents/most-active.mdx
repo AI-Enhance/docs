@@ -1,0 +1,149 @@
+---
+title: 'Get Most Active Agents'
+api: 'GET /api/ai-agents/most-active'
+description: 'Get a list of the most active AI agents based on call volume'
+---
+
+<Note>
+  **Analytics API**: Retrieve performance rankings and activity metrics for AI agents.
+</Note>
+
+## Query Parameters
+
+<ParamField query="limit" type="integer">
+  Maximum number of agents to return (default: 10)
+</ParamField>
+
+<ParamField query="period" type="string">
+  Time period for metrics: "today", "week", "month", "custom" (default: "month")
+</ParamField>
+
+<ParamField query="start_date" type="string">
+  Required when period is "custom". Start date (ISO 8601)
+</ParamField>
+
+<ParamField query="end_date" type="string">
+  Required when period is "custom". End date (ISO 8601)
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Properties">
+    <ResponseField name="agents" type="array">
+      Array of active agent metrics
+      
+      <Expandable title="Agent Metrics">
+        <ResponseField name="id" type="string">
+          Unique identifier for the AI agent
+        </ResponseField>
+        <ResponseField name="name" type="string">
+          Name of the AI agent
+        </ResponseField>
+        <ResponseField name="total_calls" type="integer">
+          Total number of calls handled
+        </ResponseField>
+        <ResponseField name="success_rate" type="number">
+          Success rate as a decimal (0.0 to 1.0)
+        </ResponseField>
+        <ResponseField name="metrics" type="object">
+          <Expandable title="Properties">
+            <ResponseField name="appointments_set" type="integer">
+              Number of appointments scheduled
+            </ResponseField>
+            <ResponseField name="qualified_leads" type="integer">
+              Number of leads qualified
+            </ResponseField>
+            <ResponseField name="average_duration" type="integer">
+              Average call duration in seconds
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="period" type="string">
+      Time period for the metrics
+    </ResponseField>
+    <ResponseField name="total_agents" type="integer">
+      Total number of agents analyzed
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request GET \
+  --url 'https://api.aienhance.net/v1/api/ai-agents/most-active?limit=5&period=month' \
+  --header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "agents": [
+      {
+        "id": "agent_123",
+        "name": "Sales Agent",
+        "total_calls": 1000,
+        "success_rate": 0.85,
+        "metrics": {
+          "appointments_set": 150,
+          "qualified_leads": 300,
+          "average_duration": 180
+        }
+      }
+    ],
+    "period": "month",
+    "total_agents": 10
+  }
+}
+```
+
+## Error Responses
+
+<CodeGroup>
+```json Invalid Period
+{
+  "success": false,
+  "error": {
+    "code": "invalid_period",
+    "message": "Invalid period specified"
+  }
+}
+```
+
+```json Invalid Date Range
+{
+  "success": false,
+  "error": {
+    "code": "invalid_date_range",
+    "message": "The specified date range is invalid"
+  }
+}
+```
+
+```json Missing Dates
+{
+  "success": false,
+  "error": {
+    "code": "missing_dates",
+    "message": "Start and end dates required for custom period"
+  }
+}
+```
+</CodeGroup>
+
+## Notes
+
+- Results are sorted by total call volume in descending order
+- Success rate is calculated based on successful outcomes (appointments, qualified leads)
+- Custom date ranges are limited to 90 days
+- Data is aggregated in your organization's timezone

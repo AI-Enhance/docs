@@ -1,0 +1,160 @@
+---
+title: 'Update AI Agent'
+api: 'PATCH /api/ai-agents/{agent_id}'
+description: 'Update an existing AI agent configuration'
+---
+
+<Note>
+  **Core API**: Modify an existing AI agent's settings and capabilities.
+</Note>
+
+## Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  Unique identifier of the AI agent
+</ParamField>
+
+## Request Body
+
+<ParamField body="name" type="string">
+  New name for the AI agent
+</ParamField>
+
+<ParamField body="configuration" type="object">
+  <Expandable title="Configuration Object">
+    <ParamField body="voice_type" type="string">
+      Voice type: "NATURAL" or "SYNTHETIC"
+    </ParamField>
+    <ParamField body="capabilities" type="array">
+      Array of enabled capabilities
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Available Capabilities
+
+<ResponseField name="capabilities" type="array">
+  <Expandable title="Available Options">
+    <ResponseField name="appointment_setting" type="string">
+      Schedule and manage appointments with customers
+    </ResponseField>
+    <ResponseField name="lead_qualification" type="string">
+      Qualify leads based on customizable criteria
+    </ResponseField>
+    <ResponseField name="follow_up" type="string">
+      Handle follow-up calls and reminders
+    </ResponseField>
+    <ResponseField name="live_transfer" type="string">
+      Transfer calls to live agents when needed
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request PATCH \
+  --url https://api.aienhance.net/v1/api/ai-agents/agent_123 \
+  --header 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "Updated Sales Agent",
+    "configuration": {
+      "voice_type": "NATURAL",
+      "capabilities": [
+        "appointment_setting",
+        "lead_qualification",
+        "live_transfer",
+        "follow_up"
+      ]
+    }
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "agent_123",
+    "name": "Updated Sales Agent",
+    "type": "VOICE",
+    "status": "ACTIVE",
+    "configuration": {
+      "voice_type": "NATURAL",
+      "language": "en-US",
+      "capabilities": [
+        "appointment_setting",
+        "lead_qualification",
+        "live_transfer",
+        "follow_up"
+      ]
+    },
+    "updated_at": "2024-01-20T11:00:00Z"
+  }
+}
+```
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Properties">
+    <ResponseField name="id" type="string">
+      Unique identifier for the AI agent
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Updated name of the AI agent
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Type of AI agent (currently only "VOICE")
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Current status: "ACTIVE", "INACTIVE", or "TRAINING"
+    </ResponseField>
+    <ResponseField name="configuration" type="object">
+      <Expandable title="Properties">
+        <ResponseField name="voice_type" type="string">
+          "NATURAL" or "SYNTHETIC"
+        </ResponseField>
+        <ResponseField name="language" type="string">
+          Language code (e.g., "en-US")
+        </ResponseField>
+        <ResponseField name="capabilities" type="array">
+          Updated array of enabled capabilities
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="updated_at" type="string">
+      Update timestamp (ISO 8601)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Error Responses
+
+<CodeGroup>
+```json Agent Not Found
+{
+  "success": false,
+  "error": {
+    "code": "agent_not_found",
+    "message": "AI agent with the specified ID was not found"
+  }
+}
+```
+
+```json Invalid Configuration
+{
+  "success": false,
+  "error": {
+    "code": "invalid_configuration",
+    "message": "The provided agent configuration is invalid"
+  }
+}
+```
+</CodeGroup>

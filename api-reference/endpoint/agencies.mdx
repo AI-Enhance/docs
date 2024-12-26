@@ -1,0 +1,265 @@
+---
+title: 'Agencies'
+description: 'Agency management and operations'
+---
+
+<Note>
+  **Account Management**: These endpoints handle agency operations within the AI Enhance platform.
+</Note>
+
+## Agency Management
+
+### List Agencies
+<ParamField path="GET /api/agencies" />
+
+Retrieve all agencies.
+
+<CodeGroup>
+```bash Request
+GET https://api.aienhance.net/v1/api/agencies
+Authorization: Bearer YOUR_ACCESS_TOKEN
+```
+
+```json Response
+{
+    "success": true,
+    "data": {
+        "agencies": [
+            {
+                "id": "AG1234567890",
+                "name": "Example Agency",
+                "email": "agency@example.com",
+                "phone_number": "+1234567890",
+                "address": "123 Main St, City, Country",
+                "created_at": "2024-01-20T10:00:00Z",
+                "status": "ACTIVE",
+                "client_count": 25,
+                "active_agents": 5
+            }
+        ],
+        "total": 1,
+        "page": 1,
+        "per_page": 10
+    }
+}
+```
+</CodeGroup>
+
+### Get Agency Details
+<ParamField path="GET /api/agencies/:agency_id" />
+
+Get detailed information about a specific agency.
+
+<CodeGroup>
+```bash Request
+GET https://api.aienhance.net/v1/api/agencies/AG1234567890
+Authorization: Bearer YOUR_ACCESS_TOKEN
+```
+
+```json Response
+{
+    "success": true,
+    "data": {
+        "id": "AG1234567890",
+        "name": "Example Agency",
+        "email": "agency@example.com",
+        "phone_number": "+1234567890",
+        "address": "123 Main St, City, Country",
+        "created_at": "2024-01-20T10:00:00Z",
+        "updated_at": "2024-01-20T10:00:00Z",
+        "status": "ACTIVE",
+        "metrics": {
+            "total_clients": 25,
+            "active_clients": 20,
+            "total_calls": 5000,
+            "success_rate": 0.85,
+            "active_agents": 5
+        },
+        "settings": {
+            "timezone": "America/New_York",
+            "default_language": "en-US",
+            "notification_preferences": {
+                "email": true,
+                "sms": false
+            }
+        }
+    }
+}
+```
+</CodeGroup>
+
+### Create Agency
+<ParamField path="POST /api/agencies" />
+
+Create a new agency.
+
+<CodeGroup>
+```bash Request
+POST https://api.aienhance.net/v1/api/agencies
+Authorization: Bearer YOUR_ACCESS_TOKEN
+Content-Type: application/json
+
+{
+    "name": "New Agency",
+    "email": "agency@example.com",
+    "phone_number": "+1234567890",
+    "address": "123 Main St, City, Country",
+    "user_id": "USER_ID_HERE"
+}
+```
+
+```json Response
+{
+    "success": true,
+    "data": {
+        "id": "AG1234567890",
+        "name": "New Agency",
+        "email": "agency@example.com",
+        "phone_number": "+1234567890",
+        "address": "123 Main St, City, Country",
+        "created_at": "2024-01-20T10:00:00Z",
+        "status": "ACTIVE"
+    }
+}
+```
+</CodeGroup>
+
+#### Request Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| name | string | Yes | Agency name |
+| email | string | Yes | Agency email |
+| phone_number | string | Yes | Contact phone number |
+| address | string | Yes | Physical address |
+| user_id | string | Yes | ID of the user creating the agency |
+
+### Update Agency
+<ParamField path="PATCH /api/agencies/:agency_id" />
+
+Update agency information.
+
+<CodeGroup>
+```bash Request
+PATCH https://api.aienhance.net/v1/api/agencies/AG1234567890
+Authorization: Bearer YOUR_ACCESS_TOKEN
+Content-Type: application/json
+
+{
+    "name": "Updated Agency Name",
+    "email": "newemail@example.com",
+    "phone_number": "+1987654321",
+    "address": "456 New St, City, Country"
+}
+```
+
+```json Response
+{
+    "success": true,
+    "data": {
+        "id": "AG1234567890",
+        "name": "Updated Agency Name",
+        "email": "newemail@example.com",
+        "phone_number": "+1987654321",
+        "address": "456 New St, City, Country",
+        "updated_at": "2024-01-20T11:00:00Z"
+    }
+}
+```
+</CodeGroup>
+
+### Delete Agency
+<ParamField path="DELETE /api/agencies/:agency_id" />
+
+Delete an agency.
+
+<CodeGroup>
+```bash Request
+DELETE https://api.aienhance.net/v1/api/agencies/AG1234567890
+Authorization: Bearer YOUR_ACCESS_TOKEN
+```
+
+```json Response
+{
+    "success": true,
+    "data": {
+        "message": "Agency successfully deleted"
+    }
+}
+```
+</CodeGroup>
+
+## Agency Operations
+
+### Get Agency Metrics
+<ParamField path="GET /api/agencies/:agency_id/metrics" />
+
+Retrieve detailed performance metrics for an agency.
+
+<CodeGroup>
+```bash Request
+GET https://api.aienhance.net/v1/api/agencies/AG1234567890/metrics
+Authorization: Bearer YOUR_ACCESS_TOKEN
+```
+
+```json Response
+{
+    "success": true,
+    "data": {
+        "agency_id": "AG1234567890",
+        "metrics": {
+            "total_clients": 25,
+            "active_clients": 20,
+            "total_calls": 5000,
+            "success_rate": 0.85,
+            "appointments_set": 750,
+            "qualified_leads": 1500,
+            "active_agents": 5,
+            "call_distribution": {
+                "morning": 2000,
+                "afternoon": 1750,
+                "evening": 1250
+            }
+        },
+        "period": {
+            "start": "2024-01-01T00:00:00Z",
+            "end": "2024-01-31T23:59:59Z"
+        }
+    }
+}
+```
+</CodeGroup>
+
+## Error Responses
+
+### Agency Not Found
+```json
+{
+    "success": false,
+    "error": {
+        "code": "agency_not_found",
+        "message": "Agency with the specified ID was not found"
+    }
+}
+```
+
+### Duplicate Agency
+```json
+{
+    "success": false,
+    "error": {
+        "code": "duplicate_agency",
+        "message": "An agency with this name already exists"
+    }
+}
+```
+
+### Invalid Agency Data
+```json
+{
+    "success": false,
+    "error": {
+        "code": "invalid_data",
+        "message": "The provided agency data is invalid"
+    }
+}

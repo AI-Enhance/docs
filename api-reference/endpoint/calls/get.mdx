@@ -1,0 +1,169 @@
+---
+title: 'Get Call Log'
+api: 'GET /api/call-logs/{call_id}'
+description: 'Get detailed information about a specific call'
+---
+
+<Note>
+  **Core API**: Retrieve comprehensive details about a specific call, including transcripts and outcomes.
+</Note>
+
+## Path Parameters
+
+<ParamField path="call_id" type="string" required>
+  Unique identifier of the call
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Properties">
+    <ResponseField name="id" type="string">
+      Unique identifier for the call
+    </ResponseField>
+    <ResponseField name="agent_id" type="string">
+      ID of the AI agent that handled the call
+    </ResponseField>
+    <ResponseField name="customer_phone" type="string">
+      Customer's phone number
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Call status: "COMPLETED", "FAILED", "BUSY"
+    </ResponseField>
+    <ResponseField name="duration" type="integer">
+      Call duration in seconds
+    </ResponseField>
+    <ResponseField name="outcome" type="string">
+      Call outcome: "APPOINTMENT_SET", "QUALIFIED_LEAD", etc.
+    </ResponseField>
+    <ResponseField name="started_at" type="string">
+      Call start time (ISO 8601)
+    </ResponseField>
+    <ResponseField name="ended_at" type="string">
+      Call end time (ISO 8601)
+    </ResponseField>
+    <ResponseField name="transcript" type="object">
+      <Expandable title="Properties">
+        <ResponseField name="segments" type="array">
+          Array of conversation segments
+          
+          <Expandable title="Segment Object">
+            <ResponseField name="speaker" type="string">
+              "AGENT" or "CUSTOMER"
+            </ResponseField>
+            <ResponseField name="text" type="string">
+              Transcribed text
+            </ResponseField>
+            <ResponseField name="timestamp" type="string">
+              Segment timestamp (ISO 8601)
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="metadata" type="object">
+      <Expandable title="Properties">
+        <ResponseField name="customer_name" type="string">
+          Customer's name if identified
+        </ResponseField>
+        <ResponseField name="appointment_time" type="string">
+          Scheduled appointment time if set (ISO 8601)
+        </ResponseField>
+        <ResponseField name="notes" type="array">
+          Array of call notes and observations
+        </ResponseField>
+        <ResponseField name="tags" type="array">
+          Array of call tags
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request GET \
+  --url https://api.aienhance.net/v1/api/call-logs/call_123 \
+  --header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "call_123",
+    "agent_id": "agent_123",
+    "customer_phone": "+1234567890",
+    "status": "COMPLETED",
+    "duration": 180,
+    "outcome": "APPOINTMENT_SET",
+    "started_at": "2024-01-20T10:00:00Z",
+    "ended_at": "2024-01-20T10:03:00Z",
+    "transcript": {
+      "segments": [
+        {
+          "speaker": "AGENT",
+          "text": "Hello, this is AI Enhance calling. How are you today?",
+          "timestamp": "2024-01-20T10:00:05Z"
+        },
+        {
+          "speaker": "CUSTOMER",
+          "text": "I'm doing well, thank you.",
+          "timestamp": "2024-01-20T10:00:08Z"
+        }
+      ]
+    },
+    "metadata": {
+      "customer_name": "John Doe",
+      "appointment_time": "2024-01-25T15:00:00Z",
+      "notes": [
+        "Customer expressed interest in premium package",
+        "Follow-up recommended in 3 months"
+      ],
+      "tags": [
+        "interested",
+        "appointment_set",
+        "premium_lead"
+      ]
+    }
+  }
+}
+```
+
+## Error Responses
+
+<CodeGroup>
+```json Call Not Found
+{
+  "success": false,
+  "error": {
+    "code": "call_not_found",
+    "message": "Call log with the specified ID was not found"
+  }
+}
+```
+
+```json Permission Denied
+{
+  "success": false,
+  "error": {
+    "code": "permission_denied",
+    "message": "You do not have permission to access this call log"
+  }
+}
+```
+</CodeGroup>
+
+## Notes
+
+- Transcripts are automatically generated and may contain errors
+- All timestamps are in UTC
+- Phone numbers are returned in E.164 format
+- Call recordings can be accessed via the recordings endpoint

@@ -1,0 +1,162 @@
+---
+title: 'Quickstart Guide'
+description: 'Get started with AI Enhance API in minutes'
+---
+
+## Getting Started with AI Enhance
+
+Welcome to AI Enhance's API platform. This guide will help you quickly integrate our enterprise AI solutions into your applications.
+
+### Authentication Setup
+
+<AccordionGroup>
+  <Accordion icon="key" title="Get Your API Keys">
+    To access AI Enhance's API endpoints, you'll need to obtain your API credentials:
+    1. Log in to your [AI Enhance Dashboard](https://www.aienhance.net/dashboard)
+    2. Navigate to API Settings
+    3. Generate your API keys for both development and production environments
+    
+    Keep your API keys secure and never expose them in client-side code.
+  </Accordion>
+  <Accordion icon="shield-check" title="Environment Setup">
+    We recommend using different API keys for development and production:
+    ```bash
+    # Development
+    AIENHANCE_API_KEY=dev_key_xxx
+    
+    # Production
+    AIENHANCE_API_KEY=prod_key_xxx
+    ```
+    Store these securely in your environment variables.
+  </Accordion>
+</AccordionGroup>
+
+### Quick Integration
+
+<AccordionGroup>
+<Accordion icon="code" title="Install SDK">
+  Install our official SDK for your preferred programming language:
+
+  ```bash
+  # Node.js
+  npm install @aienhance/sdk
+
+  # Python
+  pip install aienhance
+
+  # Java
+  <dependency>
+    <groupId>net.aienhance</groupId>
+    <artifactId>aienhance-sdk</artifactId>
+  </dependency>
+
+  # .NET
+  dotnet add package AIEnhance.SDK
+  ```
+</Accordion>
+<Accordion icon="rocket" title="Basic Authentication">
+  Here's a simple example to initialize the client:
+
+  ```javascript
+  const AIEnhance = require('@aienhance/sdk');
+  
+  const client = new AIEnhance({
+    apiKey: process.env.AIENHANCE_API_KEY,
+    environment: 'production' // or 'development'
+  });
+  ```
+</Accordion>
+</AccordionGroup>
+
+## Development Essentials
+
+<CardGroup>
+<Card
+  title="API Reference"
+  icon="book-open"
+  href="/api-reference/introduction"
+>
+  Explore our API endpoints and documentation
+</Card>
+
+<Card
+  title="Code Examples"
+  icon="code"
+  href="/essentials/code"
+>
+  View implementation examples and patterns
+</Card>
+
+<Card
+  title="Configuration"
+  icon="gear"
+  href="/essentials/settings"
+>
+  Learn about available configuration options
+</Card>
+
+<Card
+  title="Best Practices"
+  icon="stars"
+  href="/essentials/markdown"
+>
+  Development guidelines and tips
+</Card>
+</CardGroup>
+
+## Best Practices
+
+<AccordionGroup>
+<Accordion icon="shield" title="Security Guidelines">
+  - Store API keys in environment variables
+  - Use HTTPS for all API calls
+  - Implement proper error handling
+  - Monitor API usage and limits
+  - Follow the principle of least privilege
+</Accordion>
+
+<Accordion icon="server" title="Production Checklist">
+  Before deploying to production:
+  - Set up monitoring and logging
+  - Implement retry strategies
+  - Configure rate limiting
+  - Test error scenarios
+  - Set up alerts for critical issues
+</Accordion>
+</AccordionGroup>
+
+## Support Resources
+
+<CardGroup>
+<Card
+  title="Technical Docs"
+  icon="book-open"
+  href="/api-reference/introduction"
+>
+  Comprehensive API documentation
+</Card>
+
+<Card
+  title="Code Samples"
+  icon="code"
+  href="/essentials/code"
+>
+  Implementation examples
+</Card>
+
+<Card
+  title="Support"
+  icon="headset"
+  href="mailto:support@aienhance.net"
+>
+  Contact our technical support team
+</Card>
+
+<Card
+  title="Status"
+  icon="signal"
+  href="https://status.aienhance.net"
+>
+  Check API system status
+</Card>
+</CardGroup>

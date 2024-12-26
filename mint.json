@@ -1,0 +1,144 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "AI Enhance API Documentation",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/logo/AI_ENHANCE-(Main)(Cut).svg",
+  "colors": {
+    "primary": "#529bcc",
+    "light": "#529bcc",
+    "dark": "#529bcc",
+    "background": {
+      "dark": "#0a1421",
+      "light": "#f5f8fa"
+    },
+    "anchors": {
+      "from": "#529bcc",
+      "to": "#2d5a8c"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Technical Support",
+      "url": "mailto:support@aienhance.net"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Developer Portal",
+    "url": "https://www.aienhance.net/developers"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Documentation",
+      "icon": "book-open-cover",
+      "url": "introduction"
+    },
+    {
+      "name": "Developer Resources",
+      "icon": "code",
+      "url": "https://www.aienhance.net/developers"
+    },
+    {
+      "name": "System Status",
+      "icon": "signal",
+      "url": "https://status.aienhance.net"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "development"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "api-reference/introduction"
+      ]
+    },
+    {
+      "group": "Voice AI (ECHO)",
+      "pages": [
+        {
+          "group": "AI Agents",
+          "pages": [
+            "api-reference/endpoint/ai-agents/list",
+            {
+              "group": "Management",
+              "pages": [
+                "api-reference/endpoint/ai-agents/create",
+                "api-reference/endpoint/ai-agents/get",
+                "api-reference/endpoint/ai-agents/update",
+                "api-reference/endpoint/ai-agents/delete"
+              ]
+            },
+            {
+              "group": "Analytics",
+              "pages": [
+                "api-reference/endpoint/ai-agents/metrics",
+                "api-reference/endpoint/ai-agents/most-active"
+              ]
+            }
+          ]
+        },
+        {
+          "group": "Call Management",
+          "pages": [
+            "api-reference/endpoint/calls/list",
+            "api-reference/endpoint/calls/get",
+            "api-reference/endpoint/calls/recording",
+            "api-reference/endpoint/calls/transcript"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Account Management",
+      "pages": [
+        {
+          "group": "Users",
+          "pages": [
+            "api-reference/endpoint/users/signup",
+            "api-reference/endpoint/users/login",
+            "api-reference/endpoint/users/get",
+            "api-reference/endpoint/users/update"
+          ]
+        },
+        {
+          "group": "Organizations",
+          "pages": [
+            "api-reference/endpoint/organizations/list",
+            "api-reference/endpoint/organizations/create",
+            "api-reference/endpoint/organizations/get",
+            "api-reference/endpoint/organizations/update"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Development Resources",
+      "pages": [
+        "essentials/code",
+        "essentials/markdown",
+        "essentials/settings",
+        "essentials/navigation"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "linkedin": "https://www.linkedin.com/company/ai-enhance",
+    "x": "https://x.com/AIEnhance",
+    "website": "https://www.aienhance.net"
+  }
+}

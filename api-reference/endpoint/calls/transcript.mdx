@@ -1,0 +1,195 @@
+---
+title: 'Get Call Transcript'
+api: 'GET /api/call-logs/{call_id}/transcript'
+description: 'Get the detailed transcript of a specific call'
+---
+
+<Note>
+  **Core API**: Retrieve a detailed transcript with speaker identification, timestamps, and sentiment analysis.
+</Note>
+
+## Path Parameters
+
+<ParamField path="call_id" type="string" required>
+  Unique identifier of the call
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="format" type="string">
+  Response format: "json" (default) or "text"
+</ParamField>
+
+<ParamField query="include_analysis" type="boolean">
+  Include sentiment and intent analysis (default: false)
+</ParamField>
+
+<ParamField query="language" type="string">
+  Transcript language (default: "en-US")
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="Properties">
+    <ResponseField name="call_id" type="string">
+      Unique identifier for the call
+    </ResponseField>
+    <ResponseField name="duration" type="integer">
+      Call duration in seconds
+    </ResponseField>
+    <ResponseField name="language" type="string">
+      Transcript language code
+    </ResponseField>
+    <ResponseField name="segments" type="array">
+      Array of conversation segments
+      
+      <Expandable title="Segment Object">
+        <ResponseField name="speaker" type="string">
+          "AGENT" or "CUSTOMER"
+        </ResponseField>
+        <ResponseField name="text" type="string">
+          Transcribed text
+        </ResponseField>
+        <ResponseField name="timestamp" type="string">
+          Segment timestamp (ISO 8601)
+        </ResponseField>
+        <ResponseField name="confidence" type="number">
+          Transcription confidence score (0-1)
+        </ResponseField>
+        <ResponseField name="analysis" type="object">
+          Optional sentiment analysis
+          <Expandable title="Properties">
+            <ResponseField name="sentiment" type="string">
+              "POSITIVE", "NEUTRAL", or "NEGATIVE"
+            </ResponseField>
+            <ResponseField name="intent" type="string">
+              Detected intent category
+            </ResponseField>
+            <ResponseField name="keywords" type="array">
+              Important keywords detected
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="summary" type="object">
+      <Expandable title="Properties">
+        <ResponseField name="topics" type="array">
+          Main topics discussed
+        </ResponseField>
+        <ResponseField name="outcomes" type="array">
+          Key outcomes and actions
+        </ResponseField>
+        <ResponseField name="follow_up" type="array">
+          Follow-up items identified
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl --request GET \
+  --url 'https://api.aienhance.net/v1/api/call-logs/call_123/transcript?include_analysis=true' \
+  --header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "call_id": "call_123",
+    "duration": 180,
+    "language": "en-US",
+    "segments": [
+      {
+        "speaker": "AGENT",
+        "text": "Hello, this is AI Enhance calling. How are you today?",
+        "timestamp": "2024-01-20T10:00:05Z",
+        "confidence": 0.98,
+        "analysis": {
+          "sentiment": "POSITIVE",
+          "intent": "GREETING",
+          "keywords": ["greeting", "introduction"]
+        }
+      },
+      {
+        "speaker": "CUSTOMER",
+        "text": "I'm doing well, thank you. I'm interested in your services.",
+        "timestamp": "2024-01-20T10:00:08Z",
+        "confidence": 0.95,
+        "analysis": {
+          "sentiment": "POSITIVE",
+          "intent": "INTEREST",
+          "keywords": ["interested", "services"]
+        }
+      }
+    ],
+    "summary": {
+      "topics": [
+        "Service inquiry",
+        "Initial contact"
+      ],
+      "outcomes": [
+        "Customer expressed interest",
+        "Positive reception"
+      ],
+      "follow_up": [
+        "Schedule detailed service presentation"
+      ]
+    }
+  }
+}
+```
+
+## Error Responses
+
+<CodeGroup>
+```json Call Not Found
+{
+  "success": false,
+  "error": {
+    "code": "call_not_found",
+    "message": "Call log with the specified ID was not found"
+  }
+}
+```
+
+```json Transcript Not Found
+{
+  "success": false,
+  "error": {
+    "code": "transcript_not_found",
+    "message": "Transcript not available for this call"
+  }
+}
+```
+
+```json Invalid Format
+{
+  "success": false,
+  "error": {
+    "code": "invalid_format",
+    "message": "Unsupported transcript format requested"
+  }
+}
+```
+</CodeGroup>
+
+## Notes
+
+- Transcripts are generated using advanced speech recognition
+- Confidence scores indicate transcription accuracy
+- Speaker diarization separates agent and customer speech
+- Sentiment analysis is performed per segment
+- Keywords are extracted for easy reference
+- Summaries are AI-generated for quick review
